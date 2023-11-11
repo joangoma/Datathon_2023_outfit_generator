@@ -26,7 +26,10 @@ class Selector:
         pixel_matrix = [pixel_data[i * width:(i + 1) * width] for i in range(height)]
         return pixel_matrix
 
-    def outfits_with(self, prod_id: list[Identifier]) -> list[Outfit]:
+    def get_all_outfits(self) -> list[str]:
+        return self.DF_outfits()['cod_outfit'].unique().to_list()
+
+    def outfits_with(self, prod_id: list[Identifier]) -> list[str]:
         return self.DF_outfits() [self.DF_outfits() ['cod_modelo_color'] == prod_id]['cod_outfit'].to_list()
     
     def outfits_check(self, prod_id: list[Identifier]) -> bool:
@@ -105,3 +108,5 @@ class Selector:
         return self._DFproduct
 
 
+selector = Selector()
+print(selector.get_all_outfits())

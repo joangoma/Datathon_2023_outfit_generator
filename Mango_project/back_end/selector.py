@@ -14,7 +14,6 @@ Link = str
 class Selector:
     _DFoutfit: pd.DataFrame
     _DFproduct: pd.DataFrame
-    
     def __init__(self) -> None:
         self._DFoutfit = pd.read_csv('../dataset/outfit_data.csv')
         self._DFproduct = pd.read_csv('../dataset/product_data.csv')

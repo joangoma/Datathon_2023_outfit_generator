@@ -1,54 +1,39 @@
-from dataclasses import dataclass
+from PIL import Image
+from rembg import new_session, remove
 import pandas as pd
+import numpy as np
 
-Identifier = str
-Link = str
+def get_pixel_matrix(image):
+    pixel_data = list(image.getdata())
+    width, height = image.size
+    pixel_matrix = [pixel_data[i * width:(i + 1) * width] for i in range(height)]
+    return pixel_matrix
+rix
 
-class Selector:
-    _DFoutfit: pd.DataFrame
-    _DFproduct: pd.DataFrame
+def get_rgb(input_path):
+    n = len(input_path)
+    no_back_path = input_path[:n-4] + "_nback.png"
+    img = None
+    try:  
+        img = Image.open(no_back_path)
+    except FileNotFoundError:
+        in_file = Image.open(input_path)
+        output = remove(in_file)
+        output.save(no_back_path)
+        img = output
     
-    def __init__(self) -> None:
-        self._DFoutfit = pd.read_csv('../dataset/outfit_data.csv')
-        self._DFproduct = pd.read_csv('../dataset/product_data.csv')
-        
-    def DF_outfits() -> pd.DataFrame:
-        return self._DFoutfit
-        
-    def DF_products() -> pd.DataFrame:
-        return self._DFproducts
+    pixel_matrix = get_pixel_matrix(img)
+    width,height = img.size
+    suma = np.array([0,0,0,0], dtype=float)
+    print(pixel_matrix[0][0])
+    cnt = 0
+    for i in range(height):
+        for j in range(width):
+            col = np.array(pixel_matrix[i][j])
+            if np.all(abs(col) != np.array([0,0,0,0])):
+                suma = suma + col
+                cnt += 1
+    print(suma/cnt)
+    return suma/cnt
 
-
-class Outfit:
-    _identifier: Identifier
-    _clothes: list[Identifier]
-    
-    def __init__(self, identifier: Identifier) -> None:
-        self._identifier = identifier
-        self._clothes = Selector.get_outfit(identifier)
-
-
-
-class Product:    
-    _identifier: Identifier
-    cod_color_code: str
-    des_color_specification_esp: str
-    des_agrup_color_eng: str
-    des_sex: str
-    des_age: str
-    des_line: str
-    des_fabric: str
-    des_product_category: str
-    des_product_aggregated_family: str
-    des_product_family: str
-    des_product_type: str
-    des_filename: Link
-
-    
-    def __init__(self, identifier: Identifier) -> None:
-        self._identifier = identifier
-        self._clothes = Selector.get_clothing(identifier)
-    
-
-selector = Selector()
-print(selector.DF_outfits)
+get_rgb("../dataset/images/2019_41075777_09.jpg")

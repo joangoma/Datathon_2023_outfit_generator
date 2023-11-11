@@ -49,8 +49,17 @@ class Selector:
         - List of outfit identifiers
         """
         return self.DF_outfits()['cod_outfit'].unique()
+    
+    def get_all_products(self) -> list[str]:
+        """
+        Gets a list of all unique outfit identifiers.
 
-    def outfits_with(self, prod_id: list[Identifier]) -> list[str]:
+        Returns:
+        - List of outfit identifiers
+        """
+        return self.DF_products()['cod_modelo_color'].unique()
+
+    def get_outfits_with(self, prod_id: list[Identifier]) -> list[str]:
         """
         Finds outfits that contain specific product identifiers.
 
@@ -74,7 +83,7 @@ class Selector:
         """
         return self.DF_outfits()[self.DF_outfits()['cod_modelo_color'].isin(prod_id)]['cod_outfit'].nunique() == 1
     
-    def get_outfit(self, outf_id: Identifier) -> list[Identifier]:
+    def get_outfit_composition(self, outf_id: Identifier) -> list[Identifier]:
         """
         Gets a list of product identifiers that belong to a specific outfit.
 
@@ -111,7 +120,7 @@ class Selector:
         filename = self.get_product_info(prod_id)['des_filename']
         return "../dataset/images/" + filename.split("/")[-1]
     
-    def show_product(self, prod_id: Identifier) -> None:
+    def show_products(self, list_id: list[Identifier]) -> None:
         """
         Displays the image of a specific product.
 
@@ -186,7 +195,7 @@ class Selector:
         print(suma/cnt)
         return suma/cnt
 
-    # GETTERS
+    # ###############################   GETTERS  #######################################
     
     def DF_outfits(self) -> pd.DataFrame:
         """
@@ -205,8 +214,9 @@ class Selector:
         - DataFrame with product data
         """
         return self._DFproducts
-
-
+    
+    
 selector = Selector()
-for outfit_id in selector.get_all_outfits():
-    selector.show_outfit(outfit_id)
+selector.show_product("51000622-02")
+for id in [1, 2086, 4354, 3225, 5358, 6556, 6559, 6941, 3902, 7338, 7339, 6088]:
+    print(selector.get_outfit_composition(id))

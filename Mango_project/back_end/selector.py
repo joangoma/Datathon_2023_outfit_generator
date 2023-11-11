@@ -204,7 +204,7 @@ class Selector:
         Returns:
         - DataFrame with product data
         """
-        return self._DFproduct
+        return self._DFproducts
 
 
 selector = Selector()

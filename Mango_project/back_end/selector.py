@@ -19,6 +19,13 @@ class Selector:
         self._DFoutfit = pd.read_csv('../dataset/outfit_data.csv')
         self._DFproduct = pd.read_csv('../dataset/product_data.csv')
     
+    @staticmethod
+    def get_pixel_matrix(image):
+        pixel_data = list(image.getdata())
+        width, height = image.size
+        pixel_matrix = [pixel_data[i * width:(i + 1) * width] for i in range(height)]
+        return pixel_matrix
+
     def outfits_with(self, prod_id: list[Identifier]) -> list[Outfit]:
         return self.DF_outfits() [self.DF_outfits() ['cod_modelo_color'] == prod_id]['cod_outfit'].to_list()
     
@@ -61,7 +68,34 @@ class Selector:
 
         # Save the collage
         collage.save("../dataset/outfits/"+outf_id)
-    
+
+    def get_rgb(self, id):
+        input_path = self.get_product_image(id)
+        n = len(input_path)
+        no_back_path = input_path[:n-4] + "_nback.png"
+        img = None
+        try:  
+            img = Image.open(no_back_path)
+        except FileNotFoundError:
+            in_file = Image.open(input_path)
+            output = remove(in_file)
+            output.save(no_back_path)
+            img = output
+        
+        pixel_matrix = get_pixel_matrix(img)
+        width,height = img.size
+        suma = np.array([0,0,0,0], dtype=float)
+        print(pixel_matrix[0][0])
+        cnt = 0
+        for i in range(height):
+            for j in range(width):
+                col = np.array(pixel_matrix[i][j])
+                if np.all(abs(col) != np.array([0,0,0,0])):
+                    suma = suma + col
+                    cnt += 1
+        print(suma/cnt)
+        return suma/cnt
+
     # GETTERS
     
     def DF_outfits(self) -> pd.DataFrame:
@@ -69,44 +103,5 @@ class Selector:
         
     def DF_products(self) -> pd.DataFrame:
         return self._DFproduct
-    
-    
 
 
-
-
-
-
-def get_pixel_matrix(image):
-    pixel_data = list(image.getdata())
-    width, height = image.size
-    pixel_matrix = [pixel_data[i * width:(i + 1) * width] for i in range(height)]
-    return pixel_matrix
-
-def get_rgb(input_path):
-    n = len(input_path)
-    no_back_path = input_path[:n-4] + "_nback.png"
-    img = None
-    try:  
-        img = Image.open(no_back_path)
-    except FileNotFoundError:
-        in_file = Image.open(input_path)
-        output = remove(in_file)
-        output.save(no_back_path)
-        img = output
-    
-    pixel_matrix = get_pixel_matrix(img)
-    width,height = img.size
-    suma = np.array([0,0,0,0], dtype=float)
-    print(pixel_matrix[0][0])
-    cnt = 0
-    for i in range(height):
-        for j in range(width):
-            col = np.array(pixel_matrix[i][j])
-            if np.all(abs(col) != np.array([0,0,0,0])):
-                suma = suma + col
-                cnt += 1
-    print(suma/cnt)
-    return suma/cnt
-
-get_rgb("../dataset/images/2019_41075777_09.jpg")

@@ -74,16 +74,7 @@ class Selector:
     def get_rgb(self, id):
         input_path = self.get_product_image(id)
         n = len(input_path)
-        no_back_path = input_path[:n-4] + "_nback.png"
-        img = None
-        try:  
-            img = Image.open(no_back_path)
-        except FileNotFoundError:
-            in_file = Image.open(input_path)
-            output = remove(in_file)
-            output.save(no_back_path)
-            img = output
-        
+        img = Image.open(no_back_path)
         pixel_matrix = get_pixel_matrix(img)
         width,height = img.size
         suma = np.array([0,0,0,0], dtype=float)
@@ -91,7 +82,7 @@ class Selector:
         cnt = 0
         for i in range(height):
             for j in range(width):
-                col = np.array(pixel_matrix[i][j])
+                col = np.array(pixel_matrix[i][j])[:3]
                 if np.all(abs(col) != np.array([0,0,0,0])):
                     suma = suma + col
                     cnt += 1

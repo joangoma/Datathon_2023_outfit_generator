@@ -1,1 +1,1 @@
-./main.x < IdsToQuery.txt > IdsOutput.txt
+./Query.exe

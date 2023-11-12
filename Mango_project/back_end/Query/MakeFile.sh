@@ -1,10 +1,8 @@
 	g++ -c  -O2 -Wall -Wextra  -Wno-sign-compare -std=c++17 Clothes.cc 
 
-	g++ -c  -O2 -Wall -Wextra  -Wno-sign-compare -std=c++17 Outfit.cc 
+	g++ -c  -O2 -Wall -Wextra  -Wno-sign-compare -std=c++17 Query.cc
 
-	g++ -c  -O2 -Wall -Wextra  -Wno-sign-compare -std=c++17 main.cc
-
-	g++ -o program.exe main.o Outfit.o Clothes.o
+	g++ -o Query.exe Query.o Clothes.o
 
 
 rm -f *.o

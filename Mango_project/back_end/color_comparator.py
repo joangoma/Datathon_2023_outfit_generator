@@ -42,9 +42,18 @@ def comparator(colors1, colors2):
     dic["Analogous"] = 0
     dic["Complementary"] = 0
     dic["No relationship"] = 0
-
+    available = []
     for color1:colors1:
         for color2:colors2:
-            dic[color_relationship(color1, color2)] += 1
+            rel = color_relationship(color1, color2)
+            dic[rel] += 1
+            if(rel != "No relationship"):
+                available.append(color2)
+
+    if(not available.empty()):
+        
+    else:
+        print("there is no good outfit for this inition combination")
+
 
 

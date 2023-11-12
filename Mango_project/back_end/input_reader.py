@@ -20,7 +20,7 @@ with open("./Query/outfit_data.txt","w") as filename:
         filename.write("\n")
 
 with open("./Query/product_data.txt","w") as filename:
-    keys = np.array(product_data.keys()).take([0,2,4,5,8,9])
+    keys = np.array(product_data.keys()).take([0,2,4,5,8,9,10])
     n = len(product_data["cod_modelo_color"])
     filename.write(str(n))
     filename.write("\n")

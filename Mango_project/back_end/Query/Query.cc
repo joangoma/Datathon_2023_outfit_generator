@@ -17,7 +17,7 @@ void init(vector<vector<int>> & DPcolor, vector<vector<int>> & DPtype, map<pair<
         vector<Clothes> & ClothesDataBase, map<int, Clothes> & SearchByNumericId,
         map<string, int> & IdToNumericId, fstream & in) {
     // first read the clothes
-    in.open("products.txt", ios::in);  // read from the file where the products are
+    in.open("../back_end/Query/products.txt", ios::in);  // read from the file where the products are
     string id, color, sex, age, cathegory, aggregatedFamily;
     int numberProducts;                // Number of product from the input file
     in >> numberProducts;
@@ -42,7 +42,7 @@ void init(vector<vector<int>> & DPcolor, vector<vector<int>> & DPtype, map<pair<
     in.close();
 
     // Now read the outfits building the DP
-    in.open("outfits.txt", ios::in);
+    in.open("../back_end/Query/outfits.txt", ios::in);
     int numberOutfits;      // Number of good outfits
     in >> numberOutfits;
     string s;
@@ -101,7 +101,7 @@ void init(vector<vector<int>> & DPcolor, vector<vector<int>> & DPtype, map<pair<
 
 int main() {
     fstream in, out;   // Aux variable to set input and output files
-    out.open("IdsOutput.txt", ios::out);
+    out.open("../back_end/Query/IdsOutput.txt", ios::out);
 
     
     vector<vector<int>> DPcolor(200, vector<int> (200));
@@ -118,7 +118,7 @@ int main() {
     // Starts the program, it read both input files and built the Data Structures
 
     // Now read the clothes that the user want to use
-    in.open("IdsToQuery.txt", ios::in);
+    in.open("../back_end/Query/IdsToQuery.txt", ios::in);
     vector<int> Ids;
     string s;
     while (in >> s) {
@@ -140,7 +140,6 @@ int main() {
 
         // We iterate though all element and get the best one based on entropy
         for (int j = 0; j < static_cast<int>(ClothesDataBase.size()); ++j) {
-           
             // check if the clothes are of kind i
             bool valid = true;
             for (int k = 0; k < 3; k++) {
@@ -169,7 +168,7 @@ int main() {
         kind[i] = true;
         Ids.push_back(arg);
     }
-    
+   
     // To Do: Add accessories
 
 
@@ -178,7 +177,6 @@ int main() {
         for (int j = 0; j < static_cast<int>(ClothesDataBase.size()); ++j) {
             if (IdToNumericId[ClothesDataBase[j].getId()] == Ids[i]) {
                 out << ClothesDataBase[j].getId() << endl;
-                cout << Ids[i] << endl;
             }
         }
     }

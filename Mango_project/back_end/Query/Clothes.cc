@@ -11,7 +11,7 @@ using namespace std;
 Clothes::Clothes() {
     id = color = sex = age = cathegory = aggregatedFamily = ""; // Set everything to empty string as default
     kind.clear();
-    kind.resize(2);
+    kind.resize(3);
 }
 
 Clothes::Clothes(string idr, string colorr, string sexr, string ager, string cathegoryr, string aggregatedFamilyr) {
@@ -23,7 +23,7 @@ Clothes::Clothes(string idr, string colorr, string sexr, string ager, string cat
     aggregatedFamily = aggregatedFamilyr;
 
     kind.clear();
-    kind.resize(2);
+    kind.resize(3);
 
     if (cathegory == "Bottoms")   kind[0] = true;
     if (cathegory == "Tops")      kind[1] = true;

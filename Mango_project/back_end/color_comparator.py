@@ -1,54 +1,38 @@
-def rgb_to_hsv(rgb:list[int])->list[int]:
-    r, g, b = [x / 255.0 for x in rgb]
-    mx = max(r, g, b)
-    mn = min(r, g, b)
-    df = mx - mn
-    if mx == mn:
-        h = 0
-    elif mx == r:
-        h = (60 * ((g - b) / df) + 360) % 360
-    elif mx == g:
-        h = (60 * ((b - r) / df) + 120) % 360
-    elif mx == b:
-        h = (60 * ((r - g) / df) + 240) % 360
-    if mx == 0:
-        s = 0
-    else:
-        s = (df / mx) * 100
-    v = mx * 100
-    return h, s, v
+import numpy as np
+
 
 def color_relationship(color1:list[int], color2:list[int])->str:
-    h1, s1, v1 = rgb_to_hsv(color1)
-    h2, s2, v2 = rgb_to_hsv(color2)
-
+    
     # Check for monochromatic relationship
-    if abs(h1 - h2) < 30 and abs(s1 - s2) < 25:
+    eucl_dist = sum((color1-color2)**2)
+    if (eucl_dist < 10000):
         return "Monochromatic"
     # Check for complementary relationship
-    if abs(h1 - h2) > 160:
-        return "Complementary"
 
-    return "No relationship"
+    return "Complementary"
 
 def comparator(colors1, colors2):
+    """Colors1 són els fixos i colors2 no són fixos dona 
+    la relació de grup entre 
+     """
     dic = dict()
-    keys = ["Monochromatic", "Complementary", "No relationship" ]
-    for k:keys:
+    keys = ["Monochromatic", "Complementary" ]
+    for k in keys:
         dic[k] = 0
-    available = []
     for color1 in colors1:
         for color2 in colors2:
             rel = color_relationship(color1, color2)
             dic[rel] += 1
-            if(rel != "No relationship"):
-                available.append(color2)
     if(len(color1) > 1):
         dic[color_relationship(color1[0], color1[1])]
-    if dic["Complementary"] != 0:
+    if dic["No relationship"] != 0:
+        return "No relationship"
+    elif dic["Complementary"] != 0:
         return "Complementary"
     else:
-        return "Monochromatic·
+        return "Monochromatic"
+ 
 
 
+print(color_relationship(np.array([10,10,10]),np.array([10,12,11])))
 

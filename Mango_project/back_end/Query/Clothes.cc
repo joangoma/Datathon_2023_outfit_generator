@@ -26,6 +26,7 @@ Clothes::Clothes(string idr, string colorr, string sexr, string ager, string cat
     kind.clear();
     kind.resize(3);
 
+    // Set which kind is the new product
     if (cathegory == "Bottoms")   kind[0] = true;
     if (cathegory == "Tops")      kind[1] = true;
     if (cathegory == "Outerwear") kind[2] = true;
@@ -33,6 +34,8 @@ Clothes::Clothes(string idr, string colorr, string sexr, string ager, string cat
         kind[0] = kind[1] = kind[2] = true;
     }
 }
+
+// Simple methods
 
 string Clothes::getId() {
     return id;

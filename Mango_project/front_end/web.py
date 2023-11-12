@@ -10,11 +10,6 @@ from PIL import Image
 Identifier = str
 Link = str
 
-
-Identifier = str
-Link = str
-
-
 class Selector:
     """
     A class for managing outfits and product data.
@@ -285,7 +280,6 @@ class Selector:
         Parameters:
         - prod_id: Product identifier
         """
-        st.write(products)
         jpg_paths: list[str] = [self.get_product_image(prod_id) for prod_id in products]
         images: list = [Image.open(path) for path in jpg_paths]
 
@@ -398,7 +392,7 @@ def user_input():
 
 def user_description():
     st.title("User Description")
-    gender = st.selectbox("Select Gender", ["Male", "Female", "Other"])
+    gender = st.selectbox("Select Gender", ["Female", "Male", "Unisex"])
     age = st.slider("Select Age", 0, 100, 25, 1)
     # Add more attributes as needed
 
@@ -470,7 +464,6 @@ def generate_outfit(choosen_clothes):
 
     idsToQuery_path = "../back_end/Query/IdsToQuery.txt"
     idsOutput_path = "../back_end/Query/IdsOutput.txt"
-    st.write(choosen_clothes, user_input_data)
 
     if clothes_id is not None:
         with open(idsToQuery_path, "w") as query_file:
@@ -479,7 +472,6 @@ def generate_outfit(choosen_clothes):
             for id in clothes_id:
                 print(id, file=query_file)
         query_file.close()
-    st.write(clothes_id)
 
     executable_path = "./../back_end/Query/Query.exe"
     os.system(executable_path)

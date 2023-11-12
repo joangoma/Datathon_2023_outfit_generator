@@ -104,15 +104,16 @@ void init(vector<vector<int>> & DPcolor, vector<vector<int>> & DPtype, map<pair<
 int main() {
     mt19937 mt(time(nullptr));  // Randomizer
 
-
     fstream in, out;   // Aux variable to set input and output files
     out.open("../back_end/Query/IdsOutput.txt", ios::out);
 
-    
+    // Dp to be precomputed
     vector<vector<int>> DPcolor(200, vector<int> (200));
     vector<vector<int>> DPtype(200, vector<int> (200));
     map<pair<int, int>, int> DPoutfit;
 
+    // Convinient ways to stores Data
+    // ToDo -> Solve possible memory leaks with pointers
     map<string, int> IdToNumericId;                                  // set a numeric Id for each Clothe (Speed up algorithm)
     map<int, Clothes> SearchByNumericId;                             // Store Clothes by ID
     map<string, int> ColorToNumeric;                                 // More bijections to speed up the algorithm
@@ -122,6 +123,7 @@ int main() {
     init(DPcolor, DPtype, DPoutfit, ColorToNumeric, TypeToNumeric, ClothesDataBase, SearchByNumericId, IdToNumericId, in); 
     // Starts the program, it read both input files and built the Data Structures
 
+  
     // Now read the clothes that the user want to use
     in.open("../back_end/Query/IdsToQuery.txt", ios::in);
     vector<int> Ids;
@@ -131,7 +133,7 @@ int main() {
     }
 
 
-    // Set how many of basic outfit (bottom, top, outerware) is missing
+    // Set how many of basic outfit (bottom, top, outerware) are missing
     vector<bool> kind(3);
     for (int i = 0; i < static_cast<int>(Ids.size()); ++i) {
         for (int j = 0; j < 3; ++j) {
@@ -142,7 +144,7 @@ int main() {
 
     for (int i = 0; i < 3; ++i) {
         if (kind[i]) continue;
-        // In this point we need to add clothes of type i
+        // At this point we need to add clothes of type i
         int arg = 0, best = -1e9; // which clothes and its value
 
         // We iterate though all element and get the best one based on entropy
@@ -155,6 +157,7 @@ int main() {
             }
             if (not valid) continue;
 
+            // Construct the score of the product base on current Outfit
             int valueColor = 0;
             int valueType = 0;
             int valueOutfit = 0;
@@ -164,7 +167,7 @@ int main() {
                 valueOutfit += log(1 + DPoutfit[make_pair(j, Ids[k])]);
             }
 
-            if (ConstColor * valueColor + ConstType * valueType + ConstOutfit * valueOutfit > best) {                   // Update value 
+            if (ConstColor * valueColor + ConstType * valueType + ConstOutfit * valueOutfit > best) {                         // Update value 
                 arg = j;
                 best = ConstColor * valueColor + ConstType * valueType + ConstOutfit * valueOutfit;
             }
@@ -188,7 +191,8 @@ int main() {
     for (int j = 0; j < static_cast<int>(Ids.size()); ++j) {
         if (ClothesDataBase[Ids[j]].getProdFamily() == "Footwear") HaveShoes = true;
     }
-
+    
+    // Same process
     if (not HaveShoes) {
         int arg = 0, best = -1e9; // which clothes and its value
         for (int j = 0; j < static_cast<int>(ClothesDataBase.size()); ++j) {
@@ -217,7 +221,7 @@ int main() {
     
 
 
-    // Add Accesorio
+    // Add accessories with same process
     int arg = 0, best = -1e9; // which clothes and its value
     for (int j = 0; j < static_cast<int>(ClothesDataBase.size()); ++j) {
         if (ClothesDataBase[j].getProdFamily() == "Jewellery") { // Candidate

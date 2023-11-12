@@ -10,7 +10,7 @@
 using namespace std;
 
 // This should be calculated with RM
-const int ConstColor = 1, ConstType = 1, ConstOutfit = 3;
+const int ConstColor = 1, ConstType = 10, ConstOutfit = 100;
 
 void init(vector<vector<int>> & DPcolor, vector<vector<int>> & DPtype, map<pair<int, int>, int> & DPoutfit,
         map<string, int> & ColorToNumeric, map<string, int> & TypeToNumeric,
@@ -69,7 +69,6 @@ void init(vector<vector<int>> & DPcolor, vector<vector<int>> & DPtype, map<pair<
             ids.push_back(IdToNumericId[input[i]]);
         }
         
-
         // set DP of colors
         for (int i = 0; i < static_cast<int>(ids.size()); ++i) {
             for (int j = i + 1; j < static_cast<int>(ids.size()); ++j) {
@@ -125,6 +124,7 @@ int main() {
         Ids.push_back(IdToNumericId[s]);
     }
 
+
     // Set how many of basic outfit (bottom, top, outerware) is missing
     vector<bool> kind(3);
     for (int i = 0; i < static_cast<int>(Ids.size()); ++i) {
@@ -158,19 +158,32 @@ int main() {
                 valueOutfit += log(1 + DPoutfit[make_pair(j, Ids[k])]);
             }
 
-            if (ConstColor * valueColor + ConstType * valueType + ConstOutfit * valueOutfit > best) {
+            if (ConstColor * valueColor + ConstType * valueType + ConstOutfit * valueOutfit > best) {                   // Update value 
+                arg = j;
+                best = ConstColor * valueColor + ConstType * valueType + ConstOutfit * valueOutfit;
+            }
+            if (abs(ConstColor * valueColor + ConstType * valueType + ConstOutfit * valueOutfit - best) < 6 and rand()%5 == 0) { // 50% chance if equal
                 arg = j;
                 best = ConstColor * valueColor + ConstType * valueType + ConstOutfit * valueOutfit;
             }
         }
 
+
         // Update values
         if (best == -1e9) continue; 
+        // we found a Match
         kind[i] = true;
         Ids.push_back(arg);
     }
 
-   
+    // Add shoes
+    bool HaveShoes = false;
+    
+    for (int j = 0; j < static_cast<int>(ClothesDataBase.size()); ++j) {
+    
+    }
+
+
     // To Do: Add accessories
 
 

@@ -27,11 +27,11 @@ def color_relationship(color1:list[int], color2:list[int])->str:
         return "Monochromatic"
 
     # Check for analogous relationship
-    if abs(h1 - h2) < 30:
+    if abs(h1 - h2) < 30 and abs(s1 - s2) < 25:
         return "Analogous"
 
     # Check for complementary relationship
-    if abs(h1 - h2) > 180:
+    if abs(h1 - h2) > 160:
         return "Complementary"
 
     return "No relationship"
@@ -46,5 +46,5 @@ def comparator(colors1, colors2):
     for color1:colors1:
         for color2:colors2:
             dic[color_relationship(color1, color2)] += 1
-    
+
 

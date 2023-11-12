@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <deque>
 #include <cmath>
+#include <ctime> 
+#include <random>
 #include "Clothes.hh"
 using namespace std;
 
@@ -18,20 +20,21 @@ void init(vector<vector<int>> & DPcolor, vector<vector<int>> & DPtype, map<pair<
         map<string, int> & IdToNumericId, fstream & in) {
     // first read the clothes
     in.open("../back_end/Query/products.txt", ios::in);  // read from the file where the products are
-    string id, color, sex, age, cathegory, aggregatedFamily;
+    string id, color, sex, age, cathegory, aggregatedFamily, prodFamily;
     int numberProducts;                // Number of product from the input file
     in >> numberProducts;
     int colorCount, typeCount;
     colorCount = typeCount = 1;
+    getline(in, id);               // We read an extra time to flush getline function
     for (int i = 0; i < numberProducts; ++i) {
-        getline(in, id);               // We read an extra time to flush getline function
         getline(in, id);
         getline(in, color);
         getline(in, sex);
         getline(in, age);
         getline(in, cathegory);
         getline(in, aggregatedFamily);
-        ClothesDataBase.push_back(Clothes(id, color, sex, age, cathegory, aggregatedFamily));
+        getline(in, prodFamily);
+        ClothesDataBase.push_back(Clothes(id, color, sex, age, cathegory, aggregatedFamily, prodFamily));
 
         // Set bijections
         IdToNumericId[id] = i;  
@@ -99,6 +102,9 @@ void init(vector<vector<int>> & DPcolor, vector<vector<int>> & DPtype, map<pair<
 
 
 int main() {
+    mt19937 mt(time(nullptr));  // Randomizer
+
+
     fstream in, out;   // Aux variable to set input and output files
     out.open("../back_end/Query/IdsOutput.txt", ios::out);
 
@@ -162,7 +168,7 @@ int main() {
                 arg = j;
                 best = ConstColor * valueColor + ConstType * valueType + ConstOutfit * valueOutfit;
             }
-            if (abs(ConstColor * valueColor + ConstType * valueType + ConstOutfit * valueOutfit - best) < 6 and rand()%5 == 0) { // 50% chance if equal
+            if (abs(ConstColor * valueColor + ConstType * valueType + ConstOutfit * valueOutfit - best) < 6 and mt()%5 == 0) { // 50% chance if equal
                 arg = j;
                 best = ConstColor * valueColor + ConstType * valueType + ConstOutfit * valueOutfit;
             }
@@ -179,12 +185,62 @@ int main() {
     // Add shoes
     bool HaveShoes = false;
     
-    for (int j = 0; j < static_cast<int>(ClothesDataBase.size()); ++j) {
-    
+    for (int j = 0; j < static_cast<int>(Ids.size()); ++j) {
+        if (ClothesDataBase[Ids[j]].getProdFamily() == "Footwear") HaveShoes = true;
     }
 
+    if (not HaveShoes) {
+        int arg = 0, best = -1e9; // which clothes and its value
+        for (int j = 0; j < static_cast<int>(ClothesDataBase.size()); ++j) {
+            if (ClothesDataBase[j].getProdFamily() == "Footwear") { // Candidate
+                int valueColor = 0;
+                int valueType = 0;
+                int valueOutfit = 0;
+                for (int k = 0; k < static_cast<int>(Ids.size()); ++k) {
+                    valueColor += log(1 + DPcolor[ColorToNumeric[ ClothesDataBase[j].getColor() ]][ColorToNumeric[ ClothesDataBase[Ids[k]].getColor()]]);
+                    valueType += log(1 + DPtype[TypeToNumeric[ ClothesDataBase[j].getAggregatedFamily() ]][TypeToNumeric[ ClothesDataBase[Ids[k]].getAggregatedFamily() ]]);
+                    valueOutfit += log(1 + DPoutfit[make_pair(j, Ids[k])]);
+                }
 
-    // To Do: Add accessories
+                if (ConstColor * valueColor + ConstType * valueType + ConstOutfit * valueOutfit > best) {                   // Update value 
+                    arg = j;
+                    best = ConstColor * valueColor + ConstType * valueType + ConstOutfit * valueOutfit;
+                }
+                if (abs(ConstColor * valueColor + ConstType * valueType + ConstOutfit * valueOutfit - best) < 6 and mt()%5 == 0) { // 20% chance if almost equal
+                    arg = j;
+                    best = ConstColor * valueColor + ConstType * valueType + ConstOutfit * valueOutfit;
+                }
+            }
+        }
+        Ids.push_back(arg);
+    }
+    
+
+
+    // Add Accesorio
+    int arg = 0, best = -1e9; // which clothes and its value
+    for (int j = 0; j < static_cast<int>(ClothesDataBase.size()); ++j) {
+        if (ClothesDataBase[j].getProdFamily() == "Jewellery") { // Candidate
+            int valueColor = 0;
+            int valueType = 0;
+            int valueOutfit = 0;
+            for (int k = 0; k < static_cast<int>(Ids.size()); ++k) {
+                valueColor += log(1 + DPcolor[ColorToNumeric[ ClothesDataBase[j].getColor() ]][ColorToNumeric[ ClothesDataBase[Ids[k]].getColor()]]);
+                valueType += log(1 + DPtype[TypeToNumeric[ ClothesDataBase[j].getAggregatedFamily() ]][TypeToNumeric[ ClothesDataBase[Ids[k]].getAggregatedFamily() ]]);
+                valueOutfit += log(1 + DPoutfit[make_pair(j, Ids[k])]);
+            }
+
+            if (ConstColor * valueColor + ConstType * valueType + ConstOutfit * valueOutfit > best) {                   // Update value 
+                arg = j;
+                best = ConstColor * valueColor + ConstType * valueType + ConstOutfit * valueOutfit;
+            }
+            if (abs(ConstColor * valueColor + ConstType * valueType + ConstOutfit * valueOutfit - best) < 6 and rand()%5 == 0) { // 50% chance if equal
+                arg = j;
+                best = ConstColor * valueColor + ConstType * valueType + ConstOutfit * valueOutfit;
+            }
+        }
+    }
+    Ids.push_back(arg);
 
 
     // Print the selected values

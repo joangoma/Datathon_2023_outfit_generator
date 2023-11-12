@@ -14,13 +14,14 @@ Clothes::Clothes() {
     kind.resize(3);
 }
 
-Clothes::Clothes(string idr, string colorr, string sexr, string ager, string cathegoryr, string aggregatedFamilyr) {
+Clothes::Clothes(string idr, string colorr, string sexr, string ager, string cathegoryr, string aggregatedFamilyr, string prodFamilyr) {
     id = idr;
     color = colorr;
     sex = sexr;
     age = ager;
     cathegory = cathegoryr;
     aggregatedFamily = aggregatedFamilyr;
+    prodFamily = prodFamilyr;
 
     kind.clear();
     kind.resize(3);
@@ -55,6 +56,10 @@ string Clothes::getCathegory() {
 
 string Clothes::getAggregatedFamily() {
     return aggregatedFamily;
+}
+
+string Clothes::getProdFamily() {
+    return prodFamily;
 }
 
 vector<bool> Clothes::getType() {

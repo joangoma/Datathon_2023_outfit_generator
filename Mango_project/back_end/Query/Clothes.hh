@@ -17,8 +17,8 @@ class Clothes {
         string color;
         string sex;
         string age;
-        
         string aggregatedFamily;
+        string prodFamily;
         vector<bool> kind; // kind[0] = true => type bottom
                            // kind[1] = true => type tops
                            // kind[2] = true => type outerwear 
@@ -27,7 +27,7 @@ class Clothes {
     string cathegory;
         // Constructors
         Clothes();
-        Clothes(string id, string color, string sex, string age, string cathegory, string aggregatedFamily); 
+        Clothes(string id, string color, string sex, string age, string cathegory, string aggregatedFamily, string prodFamily); 
 
         // Query methods
         string getId();
@@ -36,6 +36,7 @@ class Clothes {
         string getAge();
         string getCathegory();
         string getAggregatedFamily();
+        string getProdFamily();
         vector<bool> getType();
 };
 

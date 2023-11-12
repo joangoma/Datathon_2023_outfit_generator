@@ -38,20 +38,27 @@ def color_relationship(color1:list[int], color2:list[int])->str:
 
 def comparator(colors1, colors2):
     dic = dict()
-    dic["Monochromatic"] = 0
-    dic["Analogous"] = 0
-    dic["Complementary"] = 0
-    dic["No relationship"] = 0
+    keys = ["Monochromatic", "Analogous", "Complementary", "No relationship" ]
+    for k:keys:
+        dic[k] = 0
     available = []
-    for color1:colors1:
-        for color2:colors2:
+    for color1 in colors1:
+        for color2 in colors2:
             rel = color_relationship(color1, color2)
             dic[rel] += 1
             if(rel != "No relationship"):
                 available.append(color2)
 
     if(not available.empty()):
-        
+        dic2 = dic()
+        for k in keys:
+            dic2[k] = 0
+        n = len(colors1)
+        for i in range(n):
+            for j in range(i+1,n):
+                rel = color_relationship(colors1[i],colors1[j])
+                dic2[rel] += 1
+         
     else:
         print("there is no good outfit for this inition combination")
 

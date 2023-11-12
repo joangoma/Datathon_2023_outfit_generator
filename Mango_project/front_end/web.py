@@ -329,6 +329,16 @@ class Selector:
     def get_closest_product(
         self, products: dict[str, list], profile: dict[str, str | int]
     ) -> list[None | str]:
+        """
+        Finds the closest products to the specified profile based on color and clothing type.
+
+        Parameters:
+        - products: Dictionary mapping clothing types to target RGB colors.
+        - profile: Dictionary containing user profile information (gender, age).
+
+        Returns:
+        - List of product identifiers or None if no matching products are found.
+        """
         closest_products: list[None | str] = list()
         threshold = 1.41
         # change age into either adult or child
@@ -385,12 +395,23 @@ selector = Selector()
 
 
 def user_input():
+    """
+    Gets the user's selected page from the Streamlit sidebar.
+
+    Returns:
+    - The selected page as a string.
+    """
     st.sidebar.title("Navigation")
     page = st.sidebar.radio("Go to", ["User Description", "Outfit Generator"])
     return page
 
 
 def user_description():
+    """
+    Displays and collects user input for gender and age using Streamlit.
+
+    Stores the user input in the Streamlit session state.
+    """
     st.title("User Description")
     gender = st.selectbox("Select Gender", ["Female", "Male", "Unisex"])
     age = st.slider("Select Age", 0, 100, 25, 1)
@@ -404,6 +425,12 @@ def user_description():
 
 
 def outfit_generator():
+    """
+    Displays the outfit description interface using Streamlit.
+
+    Collects user input for selected clothing options and colors.
+    Calls the generate_outfit function when the "Generate Outfit" button is pressed.
+    """
     st.title("Outfit Description")
 
     all_clothing_options = [
@@ -457,6 +484,11 @@ def outfit_generator():
 
 
 def generate_outfit(choosen_clothes):
+    """
+    Generates an outfit based on user-selected clothing options and colors.
+
+    Uses the Selector class to find the closest matching products and displays the generated outfit.
+    """
     user_input_data = st.session_state.user_input
 
     # clothes_id: list[str] | None = selector.get_closest_product()
@@ -475,14 +507,6 @@ def generate_outfit(choosen_clothes):
 
     executable_path = "./../back_end/Query/Query.exe"
     os.system(executable_path)
-
-    # fer la crida per buscar els outfits
-    # idsOutputPath conte les n i ids dels outfits
-    # crida a la funcio de selector que generi les fotos
-    # subprocess.run([r"../back_end/Query/Query.exe"])
-    # process = subprocess.Popen(["../back_end/Query/Query.exe"])
-    # process.wait()  # Wait for the process to finish
-    # les mostrem
 
     productes = list()
     with open(idsOutput_path, "r") as output_file:

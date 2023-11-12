@@ -13,7 +13,7 @@ def color_relationship(color1:list[int], color2:list[int])->str:
 
 def comparator(colors1, colors2):
     """Colors1 són els fixos i colors2 no són fixos dona 
-    la relació de grup entre 
+    la relació de grup.
      """
     dic = dict()
     keys = ["Monochromatic", "Complementary" ]
@@ -25,9 +25,8 @@ def comparator(colors1, colors2):
             dic[rel] += 1
     if(len(color1) > 1):
         dic[color_relationship(color1[0], color1[1])]
-    if dic["No relationship"] != 0:
-        return "No relationship"
-    elif dic["Complementary"] != 0:
+
+    if dic["Complementary"] != 0:
         return "Complementary"
     else:
         return "Monochromatic"

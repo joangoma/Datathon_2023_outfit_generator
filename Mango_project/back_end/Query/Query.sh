@@ -1,1 +1,0 @@
-./main.x < IdsToQuery.txt > IdsOutput.txt

@@ -136,10 +136,19 @@ int main() {
     for (int i = 0; i < 3; ++i) {
         if (kind[i]) continue;
         // In this point we need to add clothes of type i
-        int arg = 0, best = -1e9; // which clothe and its value
+        int arg = 0, best = -1e9; // which clothes and its value
 
         // We iterate though all element and get the best one based on entropy
         for (int j = 0; j < static_cast<int>(ClothesDataBase.size()); ++j) {
+           
+            // check if the clothes are of kind i
+            bool valid = true;
+            for (int k = 0; k < 3; k++) {
+                if (k == i and not ClothesDataBase[j].getType()[k]) valid = false;
+                if (k != i and ClothesDataBase[j].getType()[k])     valid = true;
+            }
+            if (not valid) continue;
+
             int valueColor = 0;
             int valueType = 0;
             int valueOutfit = 0;
@@ -150,12 +159,13 @@ int main() {
             }
 
             if (ConstColor * valueColor + ConstType * valueType + ConstOutfit * valueOutfit > best) {
-                arg = i;
+                arg = j;
                 best = ConstColor * valueColor + ConstType * valueType + ConstOutfit * valueOutfit;
             }
         }
 
         // Update values
+        if (best == -1e9) continue; 
         kind[i] = true;
         Ids.push_back(arg);
     }
@@ -168,6 +178,7 @@ int main() {
         for (int j = 0; j < static_cast<int>(ClothesDataBase.size()); ++j) {
             if (IdToNumericId[ClothesDataBase[j].getId()] == Ids[i]) {
                 out << ClothesDataBase[j].getId() << endl;
+                cout << Ids[i] << endl;
             }
         }
     }

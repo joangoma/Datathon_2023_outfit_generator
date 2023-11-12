@@ -133,6 +133,7 @@ int main() {
         }
     }
 
+
     for (int i = 0; i < 3; ++i) {
         if (kind[i]) continue;
         // In this point we need to add clothes of type i
@@ -144,7 +145,7 @@ int main() {
             bool valid = true;
             for (int k = 0; k < 3; k++) {
                 if (k == i and not ClothesDataBase[j].getType()[k]) valid = false;
-                if (k != i and ClothesDataBase[j].getType()[k])     valid = true;
+                if (k != i and ClothesDataBase[j].getType()[k])     valid = false;
             }
             if (not valid) continue;
 
@@ -168,6 +169,7 @@ int main() {
         kind[i] = true;
         Ids.push_back(arg);
     }
+
    
     // To Do: Add accessories
 

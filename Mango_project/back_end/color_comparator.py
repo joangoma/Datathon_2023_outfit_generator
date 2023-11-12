@@ -23,13 +23,8 @@ def color_relationship(color1:list[int], color2:list[int])->str:
     h2, s2, v2 = rgb_to_hsv(color2)
 
     # Check for monochromatic relationship
-    if abs(h1 - h2) < 30 and abs(s1 - s2) < 10:
-        return "Monochromatic"
-
-    # Check for analogous relationship
     if abs(h1 - h2) < 30 and abs(s1 - s2) < 25:
-        return "Analogous"
-
+        return "Monochromatic"
     # Check for complementary relationship
     if abs(h1 - h2) > 160:
         return "Complementary"
@@ -38,7 +33,7 @@ def color_relationship(color1:list[int], color2:list[int])->str:
 
 def comparator(colors1, colors2):
     dic = dict()
-    keys = ["Monochromatic", "Analogous", "Complementary", "No relationship" ]
+    keys = ["Monochromatic", "Complementary", "No relationship" ]
     for k:keys:
         dic[k] = 0
     available = []
@@ -48,19 +43,12 @@ def comparator(colors1, colors2):
             dic[rel] += 1
             if(rel != "No relationship"):
                 available.append(color2)
-
-    if(not available.empty()):
-        dic2 = dic()
-        for k in keys:
-            dic2[k] = 0
-        n = len(colors1)
-        for i in range(n):
-            for j in range(i+1,n):
-                rel = color_relationship(colors1[i],colors1[j])
-                dic2[rel] += 1
-         
+    if(len(color1) > 1):
+        dic[color_relationship(color1[0], color1[1])]
+    if dic["Complementary"] != 0:
+        return "Complementary"
     else:
-        print("there is no good outfit for this inition combination")
+        return "Monochromatic·
 
 
 

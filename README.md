@@ -1,6 +1,9 @@
 # UPC Datathon 2023
 # Fashion Compatibility Challenge <img src="resources/icon.png" align="right" height=100/>
-
+To run the project, go to the directory /Mango_project/front_end and run 
+```python
+streamlit run web.py
+```
 ## Overview
 
 <img src="resources/outfit.png">
